@@ -1,3 +1,45 @@
+<?php
+// Koneksi ke database
+$servername = "localhost";
+$username = "root";  // Ganti dengan username MySQL Anda
+$password = "";  // Ganti dengan password MySQL Anda
+$dbname = "rfid_system";
+
+// Membuat koneksi
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Memeriksa koneksi
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Jika form disubmit
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nama_mahasiswa = $_POST['nama_mahasiswa'];
+    $nim = $_POST['nim'];
+    $nomor_rfid = $_POST['nomor_rfid'];
+    $nomor_loker = $_POST['nomor_loker'];
+
+    // Validasi
+    if (empty($nama_mahasiswa) || empty($nim) || empty($nomor_rfid) || empty($nomor_loker)) {
+        echo "Semua kolom harus diisi!";
+    } else {
+        // Insert data ke database
+        $sql = "INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker) 
+                VALUES ('$nama_mahasiswa', '$nim', '$nomor_rfid', '$nomor_loker')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "Pendaftaran berhasil!";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+}
+
+// Menutup koneksi
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,44 +69,6 @@
         text-align: center;
     }
 
-    .rfid-card {
-        background: url('https://placehold.co/400x200?text=RFID+Card') no-repeat center center;
-        background-size: cover;
-        border-radius: 10px;
-        height: 200px;
-        margin-bottom: 20px;
-        position: relative;
-        color: white;
-        padding: 20px;
-    }
-
-    .rfid-card .card-number,
-    .rfid-card .card-holder,
-    .rfid-card .locker-number {
-        position: absolute;
-        font-size: 1.2em;
-    }
-
-    .rfid-card .card-number {
-        top: 50%;
-        left: 20px;
-        transform: translateY(-50%);
-    }
-
-    .rfid-card .card-holder {
-        bottom: 20px;
-        left: 20px;
-    }
-
-    .rfid-card .locker-number {
-        bottom: 20px;
-        right: 20px;
-    }
-
-    .form-control {
-        margin-bottom: 15px;
-    }
-
     .btn-primary {
         width: 100%;
         padding: 10px;
@@ -75,12 +79,7 @@
 
 <body>
     <div class="card-container">
-        <div class="rfid-card">
-            <div class="card-number">RFID: #### #### #### ####</div>
-            <div class="card-holder">Nama Pemegang<br>FULL NAME</div>
-            <div class="locker-number">Loker No: #</div>
-        </div>
-        <form action="register.php" method="POST" onsubmit="return validateForm()">
+        <form action="" method="POST">
             <div class="mb-3">
                 <input type="text" class="form-control" id="nama_mahasiswa" name="nama_mahasiswa"
                     placeholder="Nama Mahasiswa">
@@ -97,27 +96,6 @@
             <button type="submit" class="btn btn-primary">Daftar</button>
         </form>
     </div>
-
-    <script>
-    function validateForm() {
-        var nama = document.getElementById("nama_mahasiswa").value;
-        var nim = document.getElementById("nim").value;
-        var nomor_rfid = document.getElementById("nomor_rfid").value;
-        var nomor_loker = document.getElementById("nomor_loker").value;
-
-        if (nama == "" || nim == "" || nomor_rfid == "" || nomor_loker == "") {
-            alert("Semua kolom harus diisi!");
-            return false;
-        }
-
-        if (isNaN(nim)) {
-            alert("NIM harus berupa angka!");
-            return false;
-        }
-
-        return true;
-    }
-    </script>
 </body>
 
 </html>
