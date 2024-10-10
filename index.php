@@ -49,9 +49,8 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RFID Registration | Politeknik Negeri Lhokseumawe</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <style>
         /* Tema warna dan background */
@@ -64,6 +63,7 @@ $conn->close();
             background: linear-gradient(45deg, #ff7f50, #6a5acd, #ffffff);
             background-size: 300% 300%;
             animation: gradientBG 15s ease infinite;
+            margin: 0;
         }
 
         @keyframes gradientBG {
@@ -82,7 +82,7 @@ $conn->close();
 
         /* Card login */
         .card-container {
-            width: 350px;
+            width: 400px;
             padding: 30px;
             background: #ffffff;
             border-radius: 15px;
@@ -92,6 +92,7 @@ $conn->close();
             left: 17%;
             opacity: 0;
             transform: translateY(-20px);
+            text-align: center;
         }
 
         /* Animasi masuk */
@@ -108,6 +109,10 @@ $conn->close();
         .btn-primary {
             background-color: #6a5acd;
             border-color: #6a5acd;
+            padding: 10px 46px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
         }
 
         .btn-primary:hover {
@@ -124,6 +129,24 @@ $conn->close();
         .btn-dashboard:hover {
             background-color: #6a5acd;
             border-color: #6a5acd;
+        }
+
+        a.dashboard-btn {
+            display: inline-block;
+            background-color: #6a5acd;
+            /* Warna ungu */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.dashboard-btn:hover {
+            background-color: #ff7f50;
+            /* Warna oranye saat hover */
         }
 
         h2 {
@@ -143,6 +166,35 @@ $conn->close();
         .logo-container img {
             max-width: 200px;
             max-height: 200px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            /* Posisi logo di tengah */
+            align-items: center;
+            margin-bottom: 20px;
+            /* Jarak dari elemen di bawahnya */
+        }
+
+        .circle-avatar {
+            width: 300px;
+            /* Sesuaikan ukuran lebar dan tinggi */
+            height: 300px;
+            border-radius: 50%;
+            /* Membuat bentuk lingkaran */
+            object-fit: cover;
+            /* Menjaga proporsi gambar */
+            border: 3px solid #6a5acd;
+            /* Warna ungu pada border lingkaran */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            /* Memberikan sedikit bayangan */
+            transition: transform 0.3s ease;
+        }
+
+        .circle-avatar:hover {
+            transform: scale(1.1);
+            /* Membuat animasi saat hover */
         }
     </style>
 </head>
@@ -167,13 +219,15 @@ $conn->close();
             </div>
             <button type="submit" class="btn btn-primary">Daftar</button>
             <!-- Tombol ke Dashboard -->
-            <a href="dashboard.php" class="btn btn-dashboard btn-block">Ke Dashboard</a>
+            <div style="margin-top: 20px;">
+                <a href="dashboard.php" class="dashboard-btn">Ke Dashboard</a>
+            </div>
         </form>
     </div>
 
     <!-- Logo Proyek -->
     <div class="logo-container">
-        <img src="images/logo.png" alt="Logo Proyek">
+        <img src="images/logo.png" alt="Logo Proyek" class="circle-avatar">
     </div>
 
     <script>
@@ -182,6 +236,12 @@ $conn->close();
             document.getElementById("login-card").classList.add("show");
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
