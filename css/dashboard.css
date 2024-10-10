@@ -1,0 +1,23 @@
+body {
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+table {
+  margin: auto;
+  width: 80%;
+  background-color: #fff;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #dee2e6;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
