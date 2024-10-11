@@ -54,7 +54,7 @@ body {
 .btn-primary {
   background-color: #6a5acd;
   border-color: #6a5acd;
-  /* padding: 10px 40px; */
+  padding: 10px 40px;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
@@ -81,7 +81,7 @@ a.dashboard-btn {
   background-color: #6a5acd;
   /* Warna ungu */
   color: white;
-  padding: 7px 20px;
+  padding: 10px 40px;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
@@ -140,4 +140,35 @@ h2 {
 .circle-avatar:hover {
   transform: scale(1.1);
   /* Membuat animasi saat hover */
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.circle-avatar {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #6a5acd;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.circle-avatar:hover {
+  transform: scale(1.1);
+}
+
+.project-title {
+  font-family: "Poppins", sans-serif; /* Font modern dan elegan */
+  font-size: 40px; /* Ukuran font */
+  font-weight: bold; /* Membuat tulisan tebal */
+  color: #6a5acd; /* Warna ungu yang sama dengan elemen lainnya */
+  margin-top: 10px; /* Jarak antara logo dan tulisan */
+  text-align: center; /* Membuat tulisan rata tengah */
 }

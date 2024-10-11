@@ -81,10 +81,11 @@ $conn->close();
                     <option value="0">Non-Aktif</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Daftar</button>
+
             <!-- Tombol ke Dashboard -->
             <div style="margin-top: 10px;">
-                <a href="dashboard.php" class="dashboard-btn">Ke Dashboard</a>
+                <button type="submit" class="col-6 mt-3 mb-3 btn btn-primary">Add User</button>
+                <a href="dashboard.php" class="col-6 dashboard-btn">List User</a>
             </div>
         </form>
     </div>
@@ -92,20 +93,21 @@ $conn->close();
     <!-- Logo Proyek -->
     <div class="logo-container">
         <img src="images/logo.png" alt="Logo Proyek" class="circle-avatar">
+        <h2 class="project-title">Smart Locker</h2>
     </div>
 
     <script>
-    // Animasi saat halaman dibuka
-    window.onload = function() {
-        document.getElementById("login-card").classList.add("show");
-    }
+        // Animasi saat halaman dibuka
+        window.onload = function () {
+            document.getElementById("login-card").classList.add("show");
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous">
-    </script>
+        </script>
 </body>
 
 </html>

@@ -124,7 +124,7 @@ $result = $conn->query($sql);
 
 <body>
     <div class="table-container" id="dashboard-table">
-        <h2>Dashboard RFID</h2>
+        <h2>List User RFID</h2>
 
         <table class="table table-bordered table-hover">
             <thead>
