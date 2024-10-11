@@ -19,14 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nim = $_POST['nim'];
     $nomor_rfid = $_POST['nomor_rfid'];
     $nomor_loker = $_POST['nomor_loker'];
+    $status = $_POST['status'];
 
     // Validasi
-    if (empty($nama_mahasiswa) || empty($nim) || empty($nomor_rfid) || empty($nomor_loker)) {
+    if (empty($nama_mahasiswa) || empty($nim) || empty($nomor_rfid) || empty($nomor_loker) || empty($status)) {
         echo "<script>alert('Semua kolom harus diisi!');</script>";
     } else {
         // Menggunakan prepared statement untuk mencegah SQL injection
-        $stmt = $conn->prepare("INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sssi", $nama_mahasiswa, $nim, $nomor_rfid, $nomor_loker);
+        $stmt = $conn->prepare("INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker, status) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssii", $nama_mahasiswa, $nim, $nomor_rfid, $nomor_loker, $status);
 
         if ($stmt->execute()) {
             echo "<script>alert('Pendaftaran berhasil!');</script>";
@@ -52,10 +53,6 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-
-    <style>
-
-    </style>
 </head>
 
 <body>
@@ -76,6 +73,14 @@ $conn->close();
             <div class="mb-3">
                 <input type="number" class="form-control" id="nomor_loker" name="nomor_loker" placeholder="Nomor Loker">
             </div>
+            <!-- Tambahkan dropdown untuk status -->
+            <div class="mb-3">
+                <select class="form-control" id="status" name="status">
+                    <option value="">Pilih Status</option>
+                    <option value="1">Aktif</option>
+                    <option value="0">Non-Aktif</option>
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">Daftar</button>
             <!-- Tombol ke Dashboard -->
             <div style="margin-top: 10px;">
@@ -90,17 +95,17 @@ $conn->close();
     </div>
 
     <script>
-        // Animasi saat halaman dibuka
-        window.onload = function () {
-            document.getElementById("login-card").classList.add("show");
-        }
+    // Animasi saat halaman dibuka
+    window.onload = function() {
+        document.getElementById("login-card").classList.add("show");
+    }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-        crossorigin="anonymous"></script>
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>
