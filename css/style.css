@@ -78,7 +78,7 @@ body {
 
 a.dashboard-btn {
   display: inline-block;
-  background-color: #6a5acd;
+  background-color: #ff7f50;
   /* Warna ungu */
   color: white;
   padding: 10px 40px;
@@ -90,7 +90,7 @@ a.dashboard-btn {
 }
 
 a.dashboard-btn:hover {
-  background-color: #ff7f50;
+  background-color: #6a5acd;
   /* Warna oranye saat hover */
 }
 
