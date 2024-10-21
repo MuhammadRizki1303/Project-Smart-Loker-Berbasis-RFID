@@ -1,6 +1,6 @@
-import qrcode
+import qrCodeTest
 
-qr = qrcode.QRCode(
+qr = qrCodeTest.QRCode(
     version=1,
     box_size=10,
     border=5
