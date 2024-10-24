@@ -23,7 +23,7 @@ def index():
     return render_template('login.php')
 
 @app.route('/login', methods=['GET'])
-def login_face():
+def login_face():  
     video_capture = cv2.VideoCapture(0)
     while True:
         ret, frame = video_capture.read()
