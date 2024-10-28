@@ -18,9 +18,9 @@ else:
 if not os.path.exists('faces'):
     os.makedirs('faces')
 
-print('Welcome!')
-print('\nPlease put in your ID.')
-print('If this is your first time choose a random ID between 1-10000')
+print('Selamat Datang!')
+print('\nTolong masukkan ID anda.')
+print('jika ini pertama kali anda melakukan ini pilih nomor 1-10000 untuk ID anda')
 
 # Meminta input ID dari pengguna
 id = int(input('ID: '))
