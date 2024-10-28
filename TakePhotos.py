@@ -30,21 +30,21 @@ name = ''
 if id in id_names['id'].values:
     # Mengambil nama berdasarkan ID yang ada
     name = id_names[id_names['id'] == id]['name'].item()
-    print(f'Welcome Back {name}!!')
+    print(f'Selamat Datang kembali {name}!!')
 else:
     # Meminta input nama dari pengguna baru
-    name = input('Please Enter your name: ')
+    name = input('Tolong Masukkan nama anda: ')
     # Membuat folder untuk menyimpan gambar wajah pengguna berdasarkan ID
     os.makedirs(f'faces/{id}')
     # Menambahkan data ID dan nama ke file id-names.csv
     id_names = pd.concat([id_names, pd.DataFrame({'id': [id], 'name': [name]})], ignore_index=True)
     id_names.to_csv('id-names.csv', index=False)
 
-print("\nLet's capture!")
+print("\nAyo ambil Foto!")
 
-print("Now this is where you begin taking photos. Once you see a rectangle around your face, press the 's' key to capture a picture.", end=" ")
-print("It is recommended to take at least 20-25 pictures, from different angles, in different poses, with and without specs, you get the gist.")
-input("\nPress ENTER to start when you're ready, and press the 'q' key to quit when you're done!")
+print("\nSekarang, ini adalah saat di mana Anda mulai mengambil foto. Begitu Anda melihat kotak persegi panjang di sekitar wajah Anda, tekan tombol 's' untuk mengambil gambar.", end=" ")
+print("\nDisarankan untuk mengambil setidaknya 20-25 foto, dari sudut yang berbeda, dengan berbagai pose, baik dengan maupun tanpa kacamata.")
+input("\nTekan ENTER untuk mulai ketika Anda siap, dan tekan tombol 'q' untuk keluar ketika selesai!")
 
 # Mengaktifkan kamera
 camera = cv.VideoCapture(0)
@@ -71,7 +71,7 @@ while(cv.waitKey(1) & 0xFF != ord('q')):
             img_name = f'face.{id}.{datetime.now().microsecond}.jpeg'  # Membuat nama file gambar dengan ID dan waktu
             cv.imwrite(f'faces/{id}/{img_name}', face_img)  # Menyimpan gambar wajah ke folder pengguna
             photos_taken += 1  # Menambah jumlah foto yang diambil
-            print(f'{photos_taken} -> Photos taken!')
+            print(f'{photos_taken} -> Poto Sudah diambil!')
 
     cv.imshow('Face', img)  # Menampilkan frame dengan kotak wajah yang terdeteksi
 
