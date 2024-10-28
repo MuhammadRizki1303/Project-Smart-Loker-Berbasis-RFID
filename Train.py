@@ -39,9 +39,9 @@ def create_train():
 # Memanggil fungsi untuk mendapatkan data wajah dan label ID
 faces, labels = create_train()
 
-print('Training Started')  # Memberi tahu bahwa proses pelatihan dimulai
+print('Pelatihan Model Dimulai')  # Memberi tahu bahwa proses pelatihan dimulai
 # Melatih model LBPH dengan data wajah dan label
 lbph.train(faces, labels)
 # Menyimpan model yang sudah dilatih ke file YML
 lbph.save('Classifiers/TrainedLBPH.yml')
-print('Training Complete!')  # Memberi tahu bahwa proses pelatihan selesai
+print('Pelatihan Model Selesai')  # Memberi tahu bahwa proses pelatihan selesai
