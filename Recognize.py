@@ -1,52 +1,75 @@
-import pandas as pd        # Mengimpor pandas untuk manipulasi data
-import numpy as np         # Mengimpor numpy untuk operasi numerik
-import cv2 as cv           # Mengimpor OpenCV untuk pengolahan gambar dan video
+import pandas as pd
+import numpy as np
+import cv2 as cv
+import requests
 
-# Membaca file CSV yang berisi ID dan nama
-id_names = pd.read_csv('id-names.csv')
-# Memilih hanya kolom 'id' dan 'name' dari data
-id_names = id_names[['id', 'name']]
+# Membaca file CSV
+try:
+    id_names = pd.read_csv('id-names.csv')
+    id_names = id_names[['id', 'name']]
+except Exception as e:
+    print(f"Kesalahan saat membaca file CSV: {e}")
+    exit()
 
-# Memuat model klasifikasi wajah menggunakan file XML
+# Memuat classifier dan model
 faceClassifier = cv.CascadeClassifier('Classifiers/haarface.xml')
-
-# Membuat model pengenal wajah LBPH dengan ambang kepercayaan 500
 lbph = cv.face.LBPHFaceRecognizer_create(threshold=500)
-# Membaca model LBPH yang sudah dilatih dari file YML
-lbph.read('Classifiers/TrainedLBPH.yml')
+
+try:
+    lbph.read('Classifiers/TrainedLBPH.yml')
+except Exception as e:
+    print(f"Kesalahan saat membaca model LBPH: {e}")
+    exit()
 
 # Mengaktifkan kamera
 camera = cv.VideoCapture(0)
+if not camera.isOpened():
+    print("Kesalahan: Kamera tidak dapat dibuka.")
+    exit()
 
-# Memulai loop untuk menangkap frame video hingga tombol 'q' ditekan
-while cv.waitKey(1) & 0xFF != ord('q'):
-    _, img = camera.read()                         # Membaca frame dari kamera
-    grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)     # Mengonversi gambar ke grayscale
+# URL untuk mengirim data login ke PHP
+post_url = "http://localhost/Project-Smart-Loker-Berbasis-RFID/login.php"
 
-    # Mendeteksi wajah dalam frame menggunakan classifier
-    faces = faceClassifier.detectMultiScale(grey, scaleFactor=1.1, minNeighbors=4)
+# Loop untuk menangkap frame video hingga tombol 'q' ditekan
+try:
+    while cv.waitKey(1) & 0xFF != ord('q'):
+        ret, img = camera.read()
+        if not ret:
+            print("Kesalahan: Frame tidak tertangkap.")
+            break
 
-    # Untuk setiap wajah yang terdeteksi
-    for x, y, w, h in faces:
-        # Mendapatkan area wajah dan mengubah ukurannya menjadi 220x220
-        faceRegion = grey[y:y + h, x:x + w]
-        faceRegion = cv.resize(faceRegion, (220, 220))
+        grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        faces = faceClassifier.detectMultiScale(grey, scaleFactor=1.1, minNeighbors=4)
 
-        # Memprediksi ID wajah dengan model LBPH dan mendapatkan nilai kepercayaan
-        label, trust = lbph.predict(faceRegion)
-        try:
-            # Mencari nama berdasarkan ID yang diprediksi
-            name = id_names[id_names['id'] == label]['name'].item()
-            # Menggambar kotak persegi panjang di sekitar wajah
-            cv.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-            # Menampilkan nama di bawah kotak wajah
-            cv.putText(img, name, (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
-        except:
-            pass  # Mengabaikan kesalahan jika nama tidak ditemukan
+        # Untuk setiap wajah yang terdeteksi
+        for x, y, w, h in faces:
+            faceRegion = grey[y:y + h, x:x + w]
+            faceRegion = cv.resize(faceRegion, (220, 220))
 
-    # Menampilkan frame dengan wajah yang dikenali
-    cv.imshow('Recognize', img)
+            label, _ = lbph.predict(faceRegion)
+            try:
+                name = id_names[id_names['id'] == label]['name'].item()
 
-# Melepaskan kamera dan menutup semua jendela OpenCV setelah loop selesai
-camera.release()
-cv.destroyAllWindows()
+                # Kirim nama yang terdeteksi ke server PHP
+                data = {"username": name}  # Password dihapus untuk keamanan
+                response = requests.post(post_url, data=data, timeout=5)
+
+                if response.ok:
+                    print(f"Nama {name} berhasil dikirim untuk login.")
+                else:
+                    print(f"Gagal mengirim data ke server. Status: {response.status_code}, Pesan: {response.text}")
+
+                cv.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                cv.putText(img, name, (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
+            except Exception as e:
+                print(f"Kesalahan saat mengambil nama untuk label {label}: {e}")
+                pass
+
+        cv.imshow('Recognize', img)
+
+except KeyboardInterrupt:
+    print("Pengenalan dihentikan oleh pengguna.")
+finally:
+    camera.release()
+    cv.destroyAllWindows()
+    print("Kamera dilepaskan dan semua jendela ditutup.")

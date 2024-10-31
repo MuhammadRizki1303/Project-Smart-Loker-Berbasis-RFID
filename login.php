@@ -1,41 +1,97 @@
 <?php
 session_start();
+
 // Koneksi ke database
 $servername = "localhost";
-$username = "root"; // Ganti sesuai username MySQL
-$password = ""; // Ganti sesuai password MySQL
+$username_db = "root"; // Ganti sesuai username MySQL
+$password_db = ""; // Ganti sesuai password MySQL
 $dbname = "rfid_system";
 
 // Membuat koneksi
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username_db, $password_db, $dbname);
+
 // Memeriksa koneksi
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
+// Cek apakah sudah login
+if (isset($_SESSION['admin'])) {
+    // Jika sudah login, langsung ke halaman pengenalan wajah
+    echo '<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pengenalan Wajah</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {
+                background-color: #f8f9fa;
+            }
+            .button-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2 class="text-center">Pengenalan Wajah</h2>
+            <div class="button-container">
+                <button class="btn btn-primary" id="startRecognition">Mulai Pengenalan</button>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("startRecognition").addEventListener("click", function() {
+                // Menjalankan skrip Python untuk pengenalan wajah
+                fetch("run_recognize.php")
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data); // Output dari skrip Python
+                    })
+                    .catch(error => console.error("Error:", error));
+            });
+        </script>
+    </body>
+    </html>';
+    exit();
+}
+
+// Proses login
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
+    $username = $conn->real_escape_string($_POST['username']);
     $password = $_POST['password'];
 
     // Cek login admin di database
-    $sql = "SELECT * FROM admins WHERE username = '$username' AND password = '$password'";
+    $sql = "SELECT * FROM admins WHERE username = '$username'";
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        // Login sukses
-        $_SESSION['admin'] = $username;
-        header("Location: dashboard.php");
-        exit();
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        // Memverifikasi password
+        if (password_verify($password, $row['password'])) {
+            // Login sukses
+            $_SESSION['admin'] = $username;
+            // Simpan username untuk pengenalan wajah
+            file_put_contents('current_user.txt', $_SESSION['admin']);
+            header("Location: " . $_SERVER['PHP_SELF']); // Reload untuk mengarahkan ke halaman pengenalan wajah
+            exit();
+        } else {
+            // Password salah
+            $error_message = "Username atau password salah!";
+        }
     } else {
-        // Login gagal
-        echo "<script>alert('Username atau password salah!');</script>";
+        // Username tidak ditemukan
+        $error_message = "Username atau password salah!";
     }
 }
 
 // Menutup koneksi
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +101,6 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login dengan Pengenalan Wajah</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
@@ -59,69 +113,31 @@ $conn->close();
             align-items: center;
             flex-direction: column;
         }
-
-        .video-container {
-            border: 2px solid #6a5acd;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        #video {
-            width: 400px;
-            height: 300px;
-        }
-
-        .login-btn {
-            margin-top: 20px;
-        }
     </style>
 </head>
 
 <body>
-
     <div class="login-container">
         <h2 class="text-center project-title">Login dengan Pengenalan Wajah</h2>
-        <div class="video-container">
-            <video id="video" autoplay muted></video>
-        </div>
-        <button class="btn btn-primary login-btn" onclick="window.location.href='input.php'">Login dengan
-            Wajah</button>
+
+        <?php if (isset($error_message)): ?>
+            <div class="alert alert-danger text-center" role="alert">
+                <?= htmlspecialchars($error_message); ?>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST" action="">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
     </div>
-
-    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
-    <script>
-        // Mengakses kamera pengguna
-        async function startCamera() {
-            const video = document.getElementById('video');
-            navigator.mediaDevices.getUserMedia({
-                video: {}
-            })
-                .then(stream => {
-                    video.srcObject = stream;
-                })
-                .catch(err => console.error("Kamera tidak ditemukan:", err));
-        }
-
-        // Mulai pengenalan wajah
-        async function startFaceRecognition() {
-            await faceapi.nets.tinyFaceDetector.loadFromUri('/models'); // Pastikan model diunduh
-            const video = document.getElementById('video');
-            const options = new faceapi.TinyFaceDetectorOptions();
-
-            const detection = await faceapi.detectSingleFace(video, options);
-            if (detection) {
-                alert('Wajah terdeteksi, login berhasil!');
-                // Redirect ke halaman dashboard setelah login sukses
-                window.location.href = "input.php";
-            } else {
-                alert('Wajah tidak terdeteksi, coba lagi.');
-            }
-        }
-
-        // Mulai kamera saat halaman dimuat
-        window.onload = startCamera;
-    </script>
-
 </body>
 
 </html>
