@@ -68,7 +68,7 @@ while(cv.waitKey(1) & 0xFF != ord('q')):
         # Menyimpan foto saat tombol 's' ditekan dan area wajah cukup terang
         if cv.waitKey(1) & 0xFF == ord('s') and np.average(face_region) > 50:
             face_img = cv.resize(face_region, (220, 220))  # Mengubah ukuran gambar wajah menjadi 220x220
-            img_name = f'face.{id}.{datetime.now().microsecond}.jpeg'  # Membuat nama file gambar dengan ID dan waktu
+            img_name = f'{id}.{datetime.now().microsecond}.jpeg'  # Membuat nama file gambar dengan ID dan waktu
             cv.imwrite(f'faces/{id}/{img_name}', face_img)  # Menyimpan gambar wajah ke folder pengguna
             photos_taken += 1  # Menambah jumlah foto yang diambil
             print(f'{photos_taken} -> Poto Sudah diambil!')
@@ -77,4 +77,4 @@ while(cv.waitKey(1) & 0xFF != ord('q')):
 
 # Melepaskan kamera dan menutup semua jendela OpenCV setelah loop selesai
 camera.release()
-cv.destroyAllWindows()
+cv.destroyAllWindows() 
