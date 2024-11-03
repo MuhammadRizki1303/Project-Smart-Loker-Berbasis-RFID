@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 }
 
 // Cek apakah sudah login
-if (isset($_SESSION['admin'])) {
+if (isset($_SESSION['admins'])) {
     // Jika sudah login, langsung ke halaman pengenalan wajah
     echo '<!DOCTYPE html>
     <html lang="en">
@@ -74,9 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Memverifikasi password
         if (password_verify($password, $row['password'])) {
             // Login sukses
-            $_SESSION['admin'] = $username;
+            $_SESSION['admins'] = $username;
             // Simpan username untuk pengenalan wajah
-            file_put_contents('current_user.txt', $_SESSION['admin']);
+            file_put_contents('current_user.txt', $_SESSION['admins']);
             header("Location: " . $_SERVER['PHP_SELF']); // Reload untuk mengarahkan ke halaman pengenalan wajah
             exit();
         } else {
