@@ -67,7 +67,7 @@ def authenticate_image(captured_image):
 # Open the dashboard page if authenticated
 def open_dashboard():
     # Open the dashboard.html in the default web browser
-    webbrowser.open("dashboard.html")  # Adjust the URL as needed
+    webbrowser.open("input.php")  # Adjust the URL as needed
 
 if __name__ == "__main__":
     print("Please position yourself in front of the camera...")
