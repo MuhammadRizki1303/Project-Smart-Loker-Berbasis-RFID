@@ -11,19 +11,19 @@ AUTH_API_URL = "http://127.0.0.1:5000/authenticate"
 def capture_image():
     cap = cv2.VideoCapture(0)  # Open the default camera (0)
     if not cap.isOpened():
-        print("Error: Camera could not be opened.")
+        print("Error: Kamera tidak bisa dibuka.")
         return None
 
     ret, frame = cap.read()
     cap.release()
     
     if not ret:
-        print("Error: Could not capture an image.")
+        print("Error: tidak bisa mengambil gambar.")
         return None
 
     # Save the captured image for verification
     cv2.imwrite("captured_image.jpg", frame)
-    print("Image captured and saved as 'captured_image.jpg'")
+    print("Gambar diambil dan disimpan dengan nama 'captured_image.jpg'")
     
     return frame
 
@@ -43,7 +43,7 @@ def authenticate_image(captured_image):
         with open("reference_image.jpg", "rb") as ref_file:
             reference_image_base64 = base64.b64encode(ref_file.read()).decode('utf-8')
     except FileNotFoundError:
-        print("Error: Reference image not found.")
+        print("Error: referensi wajah tidak ditemukan.")
         return
 
     # Send the images to the Flask authentication API
@@ -57,20 +57,20 @@ def authenticate_image(captured_image):
     if response.status_code == 200:
         result = response.json()
         if result["status"] == "sukses":
-            print("Login Successful!")
+            print("Login Sukses sobad!")
             open_dashboard()  # Open the dashboard if login is successful
         else:
-            print("Login Failed. Face does not match.")
+            print("login gagal. wajah tidak ditemukan.")
     else:
-        print("Error during authentication:", response.json().get("error", "Unknown error"))
+        print("Error saat otentikasi:", response.json().get("error", "Unknown error"))
 
 # Open the dashboard page if authenticated
 def open_dashboard():
     # Open the dashboard.html in the default web browser
-    webbrowser.open("input.php")  # Adjust the URL as needed
+    webbrowser.open("http://localhost/Project-Smart-Loker-Berbasis-RFID/input.php")  # Adjust the URL as needed
 
 if __name__ == "__main__":
-    print("Please position yourself in front of the camera...")
+    print("Tolong posisikan muka anda didepan kamera")
     captured_image = capture_image()
     
     if captured_image is not None:
