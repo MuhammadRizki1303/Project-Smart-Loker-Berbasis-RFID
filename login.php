@@ -1,50 +1,19 @@
 <?php
 session_start();
 
-// Koneksi ke database
-$servername = "localhost";
-$username_db = "root";
-$password_db = "";
-$dbname = "rfid_system";
-
-// Membuat koneksi
-$conn = new mysqli($servername, $username_db, $password_db, $dbname);
-
-// Memeriksa koneksi
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
 // Proses login
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $conn->real_escape_string($_POST['username']);
-    $password = $_POST['password'];
+    $username = $_POST['username'];
 
-    // Cek login admin di database
-    $sql = "SELECT * FROM admins WHERE username = '$username'";
-    $result = $conn->query($sql);
+    // Simpan username ke sesi untuk kebutuhan autentikasi wajah
+    $_SESSION['username'] = $username;
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-
-        // Memverifikasi password
-        if ($password === $row['password']) {
-            // Simpan username untuk pengenalan wajah
-            $_SESSION['username'] = $username;
-
-            // Panggil script pengenalan wajah
-            header("Location: recognize.php");
-            exit();
-        } else {
-            $error_message = "Username atau password salah!";
-        }
-    } else {
-        $error_message = "Username atau password salah!";
-    }
+    // Langsung alihkan ke halaman autentikasi wajah
+    header("Location: recognize.php");
+    exit();
 }
-
-$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -183,12 +152,15 @@ $conn->close();
     <div class="login-container show">
         <h2 class="text-center project-title">Login dengan Pengenalan Wajah</h2>
 
-        <?php if (isset($error_message)): ?>
+        <!-- Tampilkan pesan kesalahan dari sesi jika ada -->
+        <?php if (isset($_SESSION['error_message'])): ?>
             <div class="alert alert-danger text-center" role="alert">
-                <?= htmlspecialchars($error_message); ?>
+                <?= htmlspecialchars($_SESSION['error_message']); ?>
+                <?php unset($_SESSION['error_message']); ?>
             </div>
         <?php endif; ?>
 
+        <!-- Form login tetap sama -->
         <form method="POST" action="">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>

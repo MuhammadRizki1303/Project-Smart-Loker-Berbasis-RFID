@@ -66,8 +66,8 @@ def authenticate_image(captured_image):
 
 # Open the dashboard page if authenticated
 def open_dashboard():
-    # Open the dashboard.html in the default web browser
-    webbrowser.open("http://localhost/Project-Smart-Loker-Berbasis-RFID/input.php")  # Adjust the URL as needed
+    chrome_path = "C:/Users/Rizki/AppData/Local/Google/Chrome/Application/chrome.exe %s"  # Sesuaikan path Chrome di komputer Anda
+    webbrowser.get(chrome_path).open("http://localhost/Project-Smart-Loker-Berbasis-RFID/input.php")
 
 if __name__ == "__main__":
     print("Tolong posisikan muka anda didepan kamera")
