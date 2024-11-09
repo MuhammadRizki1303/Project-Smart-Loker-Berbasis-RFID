@@ -1,36 +1,43 @@
 <?php
 // Koneksi ke database
 $servername = "localhost";
-$username = "root";  // Ganti dengan username MySQL Anda
-$password = "";  // Ganti dengan password MySQL Anda
+$username = "root";
+$password = "";
 $dbname = "rfid_system";
 
-// Membuat koneksi
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Memeriksa koneksi
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Menghapus data
-if (isset($_GET['delete_id'])) {
-    $id = $_GET['delete_id'];
-    $stmt = $conn->prepare("DELETE FROM rfid_cards WHERE id = ?");
-    $stmt->bind_param("i", $id);
+// Proses penghapusan data
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_nim'])) {
+    $nim = $_POST['delete_nim'];
 
+    // Simpan data ke history sebelum dihapus
+    $delete_sql = "INSERT INTO history (nama, nim, nomor_rfid, nomor_loker, status, nomor_hp) 
+                    SELECT nama, nim, nomor_rfid, nomor_loker, status, nomor_hp FROM rfid_cards WHERE nim = ?";
+    $stmt = $conn->prepare($delete_sql);
+    $stmt->bind_param("s", $nim);
+    $stmt->execute();
+
+    // Hapus data dari rfid_cards
+    $delete_sql = "DELETE FROM rfid_cards WHERE nim = ?";
+    $stmt = $conn->prepare($delete_sql);
+    $stmt->bind_param("s", $nim);
     if ($stmt->execute()) {
-        echo "<script>alert('Data Berhasil Dihapus!!');</script>";
+        echo "<script>alert('Data berhasil dihapus'); window.location.href='dashboard.php';</script>";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('Gagal menghapus data');</script>";
     }
-    $stmt->close();
 }
 
-
-// Mengambil data dari database
+// Ambil semua data user dari tabel rfid_cards
 $sql = "SELECT * FROM rfid_cards";
 $result = $conn->query($sql);
+
+// Menutup koneksi
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -41,10 +48,6 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard RFID | Politeknik Negeri Lhokseumawe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/dashboard.css">
-
     <style>
         /* Tema warna dan background */
         body {
@@ -78,16 +81,8 @@ $result = $conn->query($sql);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            opacity: 0;
-            transform: translateY(-20px);
             width: 90%;
             max-width: 900px;
-        }
-
-        .table-container.show {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         h2 {
@@ -122,11 +117,16 @@ $result = $conn->query($sql);
             text-align: center;
             vertical-align: middle;
         }
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 
 <body>
-    <div class="table-container" id="dashboard-table">
+    <div class="table-container">
         <h2>List User RFID</h2>
 
         <table class="table table-bordered table-hover">
@@ -150,10 +150,13 @@ $result = $conn->query($sql);
                             <td><?php echo $row['nim']; ?></td>
                             <td><?php echo $row['nomor_rfid']; ?></td>
                             <td><?php echo $row['nomor_loker']; ?></td>
-                            <td><?php echo $row['status']; ?></td>
+                            <td><?php echo $row['status'] == 1 ? 'Aktif' : 'Non-Aktif'; ?></td>
                             <td>
-                                <a href="dashboard.php?delete_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
+                                <form action="dashboard.php" method="POST"
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    <input type="hidden" name="delete_nim" value="<?php echo $row['nim']; ?>">
+                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                </form>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -165,23 +168,11 @@ $result = $conn->query($sql);
             </tbody>
         </table>
 
-        <!-- Tombol kembali ke halaman login -->
         <div class="text-center">
-            <a href="input.php" class="btn btn-back btn-block">Kembali ke Halaman Input</a>
+            <a href="history.php" class="btn btn-info btn-block">Lihat History Penghapusan</a>
         </div>
     </div>
 
-    <script>
-        // Animasi saat halaman dibuka
-        window.onload = function () {
-            document.getElementById("dashboard-table").classList.add("show");
-        }
-    </script>
 </body>
 
 </html>
-
-<?php
-// Menutup koneksi
-$conn->close();
-?>

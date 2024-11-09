@@ -20,14 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nomor_rfid = $_POST['nomor_rfid'];
     $nomor_loker = $_POST['nomor_loker'];
     $status = $_POST['status'];
+    $nomor_hp = $_POST['nomor_hp'];  // Menambah variabel untuk nomor HP
 
     // Validasi
-    if (empty($nama_mahasiswa) || empty($nim) || empty($nomor_rfid) || empty($nomor_loker) || empty($status)) {
+    if (empty($nama_mahasiswa) || empty($nim) || empty($nomor_rfid) || empty($nomor_loker) || empty($status) || empty($nomor_hp)) {
         echo "<script>alert('Semua kolom harus diisi!');</script>";
     } else {
         // Menggunakan prepared statement untuk mencegah SQL injection
-        $stmt = $conn->prepare("INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker, status) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssii", $nama_mahasiswa, $nim, $nomor_rfid, $nomor_loker, $status);
+        $stmt = $conn->prepare("INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker, status, nomor_hp) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssisi", $nama_mahasiswa, $nim, $nomor_rfid, $nomor_loker, $status, $nomor_hp);
 
         if ($stmt->execute()) {
             echo "<script>alert('Pendaftaran berhasil!');</script>";
@@ -83,6 +84,11 @@ $conn->close();
                 </select>
             </div>
 
+            <!-- Kolom untuk Nomor HP -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="nomor_hp" name="nomor_hp" placeholder="Nomor HP">
+            </div>
+
             <!-- Tombol ke Dashboard -->
             <div style="margin-top: 10px;">
                 <button type="submit" class="col-6 mt-3 mb-3 btn btn-primary">Add User</button>
@@ -99,16 +105,16 @@ $conn->close();
 
     <script>
         // Animasi saat halaman dibuka
-        window.onload = function () {
+        window.onload = function() {
             document.getElementById("login-card").classList.add("show");
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
-        </script>
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous">
-        </script>
+    </script>
 </body>
 
 </html>
