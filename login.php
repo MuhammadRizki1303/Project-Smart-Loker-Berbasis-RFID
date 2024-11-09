@@ -21,10 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Pengenalan Wajah</title>
+    <link rel="stylesheet" href="css/style.css">
     <style>
         /* Global Styles */
         body {
-            background: linear-gradient(45deg, #ff7f50, #6a5acd, #4a4e69, #22223b);
+            background: linear-gradient(45deg, #ff7f50, #6a5acd, #ffffff);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             display: flex;
