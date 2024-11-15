@@ -19,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nim = $_POST['nim'];
     $nomor_rfid = $_POST['nomor_rfid'];
     $nomor_loker = $_POST['nomor_loker'];
-    $status = $_POST['status'];
-    $nomor_hp = $_POST['nomor_hp'];  // Menambah variabel untuk nomor HP
+    $status = $_POST['status'];  // Ambil nilai status dari dropdown
+    $nomor_hp = $_POST['nomor_hp'];  // Nomor HP
 
-    // Validasi
-    if (empty($nama_mahasiswa) || empty($nim) || empty($nomor_rfid) || empty($nomor_loker) || empty($status) || empty($nomor_hp)) {
+    // Validasi input
+    if (empty($nama_mahasiswa) || empty($nim) || empty($nomor_rfid) || empty($nomor_loker) || $status == "" || empty($nomor_hp)) {
         echo "<script>alert('Semua kolom harus diisi!');</script>";
     } else {
         // Menggunakan prepared statement untuk mencegah SQL injection
@@ -58,7 +58,6 @@ $conn->close();
 </head>
 
 <body>
-    <!-- Card Login -->
     <div class="card-container" id="login-card">
         <h2>RFID Registration</h2>
         <form action="" method="POST">
@@ -75,7 +74,7 @@ $conn->close();
             <div class="mb-3">
                 <input type="number" class="form-control" id="nomor_loker" name="nomor_loker" placeholder="Nomor Loker">
             </div>
-            <!-- Tambahkan dropdown untuk status -->
+            <!-- Dropdown untuk Status -->
             <div class="mb-3">
                 <select class="form-control" id="status" name="status">
                     <option value="">Pilih Status</option>
@@ -104,10 +103,10 @@ $conn->close();
     </div>
 
     <script>
-        // Animasi saat halaman dibuka
-        window.onload = function() {
-            document.getElementById("login-card").classList.add("show");
-        }
+    // Animasi saat halaman dibuka
+    window.onload = function() {
+        document.getElementById("login-card").classList.add("show");
+    }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
