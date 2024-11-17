@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2024 at 03:02 AM
+-- Generation Time: Nov 17, 2024 at 04:08 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.0.19
 
@@ -70,7 +70,7 @@ CREATE TABLE `rfid_cards` (
   `nim` varchar(20) NOT NULL,
   `nomor_rfid` varchar(50) NOT NULL,
   `nomor_loker` int(11) NOT NULL,
-  `status` enum('Digunakan','Tidak Digunakan') DEFAULT 'Tidak Digunakan',
+  `status` tinyint(1) DEFAULT NULL,
   `nomor_hp` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -79,7 +79,7 @@ CREATE TABLE `rfid_cards` (
 --
 
 INSERT INTO `rfid_cards` (`id`, `nama`, `nim`, `nomor_rfid`, `nomor_loker`, `status`, `nomor_hp`) VALUES
-(26, 'Muhammad Rizki', '2022573010060', '2', 2, 'Digunakan', '82279226814');
+(36, 'Muhammad Rizki', '2022573010023', '', 0, 1, '82279226814');
 
 --
 -- Indexes for dumped tables
@@ -118,13 +118,13 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `rfid_cards`
 --
 ALTER TABLE `rfid_cards`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
