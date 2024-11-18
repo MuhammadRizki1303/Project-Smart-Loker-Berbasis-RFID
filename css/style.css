@@ -53,8 +53,8 @@ body {
 
 .btn-primary {
   background-color: #6a5acd;
-  border-color: #6a5acd;
-  padding: 10px 40px;
+  border-color: #ff7f50;
+  padding: 10px 20px;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
@@ -62,26 +62,15 @@ body {
 
 .btn-primary:hover {
   background-color: #ff7f50;
-  border-color: #ff7f50;
+  border-color: #6a5acd;
 }
 
 .btn-dashboard {
   background-color: #ff7f50;
-  border-color: #ff7f50;
-  margin-top: 10px;
-}
-
-.btn-dashboard:hover {
-  background-color: #6a5acd;
   border-color: #6a5acd;
-}
-
-a.dashboard-btn {
   display: inline-block;
-  background-color: #ff7f50;
-  /* Warna ungu */
   color: white;
-  padding: 10px 40px;
+  padding: 10px 20px;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
@@ -89,9 +78,10 @@ a.dashboard-btn {
   transition: background-color 0.3s ease;
 }
 
-a.dashboard-btn:hover {
+.btn-dashboard:hover {
   background-color: #6a5acd;
-  /* Warna oranye saat hover */
+  border-color: #ff7f50;
+  color: black;
 }
 
 h2 {

@@ -49,32 +49,24 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>History Penghapusan | Politeknik Negeri Lhokseumawe</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Tema warna dan background */
-        body {
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(45deg, #ff7f50, #6a5acd, #ffffff);
-            background-size: 300% 300%;
-            animation: gradientBG 15s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+        .history-title {
+            font-family: "Poppins", sans-serif;
+            /* Font modern dan elegan */
+            font-size: 30px;
+            /* Ukuran font */
+            font-weight: bold;
+            /* Membuat tulisan tebal */
+            color: #6a5acd;
+            /* Warna ungu yang sama dengan elemen lainnya */
+            margin-top: 10px;
+            /* Jarak antara logo dan tulisan */
+            text-align: center;
+            /* Membuat tulisan rata tengah */
         }
 
         .table-container {
@@ -126,7 +118,7 @@ $conn->close();
 
 <body>
     <div class="table-container">
-        <h2>History Penghapusan Data</h2>
+        <h2 class="history-title">History Penghapusan Data</h2>
 
         <table class="table table-bordered table-hover">
             <thead>
@@ -172,7 +164,7 @@ $conn->close();
         </table>
 
         <div class="text-center mt-3">
-            <a href="dashboard.php" class="btn btn-info">Kembali ke Dashboard</a>
+            <a href="dashboard.php" class="btn btn-primary">Back</a>
         </div>
     </div>
 </body>

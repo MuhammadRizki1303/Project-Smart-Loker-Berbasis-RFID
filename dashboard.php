@@ -67,70 +67,41 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard RFID | Politeknik Negeri Lhokseumawe</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Tema warna dan background */
-        body {
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(45deg, #ff7f50, #6a5acd, #ffffff);
-            background-size: 300% 300%;
-            animation: gradientBG 15s ease infinite;
+        .dashboard-title {
+            font-family: "Poppins", sans-serif;
+            /* Font modern dan elegan */
+            font-size: 30px;
+            /* Ukuran font */
+            font-weight: bold;
+            /* Membuat tulisan tebal */
+            color: #6a5acd;
+            /* Warna ungu yang sama dengan elemen lainnya */
+            margin-top: 10px;
+            /* Jarak antara logo dan tulisan */
+            text-align: center;
+            /* Membuat tulisan rata tengah */
         }
 
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Animasi dan tampilan tabel */
         .table-container {
             background: #ffffff;
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 900px;
+            width: 100%;
+            max-width: 1200px;
             margin-top: 30px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
         }
 
         h2 {
             color: #6a5acd;
             text-align: center;
             margin-bottom: 20px;
-        }
-
-        /* Warna tombol yang konsisten */
-        .btn-danger {
-            background-color: #ff7f50;
-            border-color: #ff7f50;
-        }
-
-        .btn-danger:hover {
-            background-color: #6a5acd;
-            border-color: #6a5acd;
-        }
-
-        .btn-info {
-            background-color: #6a5acd;
-            border-color: #6a5acd;
-        }
-
-        .btn-info:hover {
-            background-color: #ff7f50;
-            border-color: #ff7f50;
         }
 
         .btn-success {
@@ -154,16 +125,6 @@ $conn->close();
             margin-bottom: 1rem;
         }
 
-        .status-active {
-            color: green;
-            font-weight: bold;
-        }
-
-        .status-inactive {
-            color: red;
-            font-weight: bold;
-        }
-
         /* Responsif */
         @media (max-width: 767px) {
             .table-container {
@@ -175,8 +136,8 @@ $conn->close();
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h2 class="text-center">List User RFID</h2>
+    <div class="table-container mt-5">
+        <h2 class="text-center dashboard-title">List User RFID</h2>
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -207,9 +168,9 @@ $conn->close();
                                 <form action="dashboard.php" method="POST" style="display:inline;"
                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                     <input type="hidden" name="delete_nim" value="<?php echo $row['nim']; ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                    <button type="submit" class="btn col-5 btn-danger btn-sm">Delete</button>
                                 </form>
-                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                <button type="button" class="btn col-5 btn-warning btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#editModal<?php echo $row['nim']; ?>">Edit</button>
                             </td>
                         </tr>
@@ -258,8 +219,7 @@ $conn->close();
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                                         </div>
                                     </form>
@@ -276,11 +236,11 @@ $conn->close();
         </table>
 
         <div class="text-center mt-3">
-            <a href="history.php" class="btn btn-info">Lihat History Penghapusan</a>
+            <a href="history.php" class="col-sm-2 btn btn-dashboard">History</a>
+            <a href="input.php" class="col-2 btn btn-dashboard">Add</a>
         </div>
-        <div class="text-center mt-2">
-            <a href="input.php" class="btn btn-info">Tambah Data</a>
-        </div>
+
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
