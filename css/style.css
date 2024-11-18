@@ -362,6 +362,7 @@ h2 {
 
 /* Floating Effect on Focus */
 .floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label,
 .floating-label select:focus + label {
   top: -8px;
   left: 10px;
