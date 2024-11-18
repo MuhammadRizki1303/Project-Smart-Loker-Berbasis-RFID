@@ -14,22 +14,35 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['restore_nim'])) {
     $nim = $_POST['restore_nim'];
 
+    // Validasi input NIM
+    if (empty($nim)) {
+        echo "<script>alert('NIM tidak boleh kosong.'); window.location.href='history.php';</script>";
+        exit();
+    }
+
     // Memulihkan data dari tabel history ke tabel rfid_cards
     $restore_sql = "INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker, status, nomor_hp) 
-                    SELECT nama, nim, NULL AS nomor_rfid, NULL AS nomor_loker, status, nomor_hp 
+                    SELECT nama, nim, COALESCE(nomor_rfid, '') AS nomor_rfid, COALESCE(nomor_loker, '') AS nomor_loker, status, nomor_hp 
                     FROM history WHERE nim = ?";
     $stmt = $conn->prepare($restore_sql);
-    $stmt->bind_param("s", $nim);
-    $stmt->execute();
+    if (!$stmt) {
+        die("Error saat prepare statement: " . $conn->error);
+    }
 
-    // Hapus data dari tabel history setelah dipulihkan
-    $delete_sql = "DELETE FROM history WHERE nim = ?";
-    $stmt = $conn->prepare($delete_sql);
     $stmt->bind_param("s", $nim);
     if ($stmt->execute()) {
-        echo "<script>alert('Data berhasil dipulihkan'); window.location.href='history.php';</script>";
+        // Hapus data dari tabel history setelah dipulihkan
+        $delete_sql = "DELETE FROM history WHERE nim = ?";
+        $stmt_delete = $conn->prepare($delete_sql);
+        $stmt_delete->bind_param("s", $nim);
+
+        if ($stmt_delete->execute()) {
+            echo "<script>alert('Data berhasil dipulihkan'); window.location.href='history.php';</script>";
+        } else {
+            echo "<script>alert('Gagal menghapus data dari history.');</script>";
+        }
     } else {
-        echo "<script>alert('Gagal memulihkan data');</script>";
+        echo "<script>alert('Gagal memulihkan data ke rfid_cards.');</script>";
     }
 }
 
@@ -40,7 +53,6 @@ $result = $conn->query($sql);
 // Menutup koneksi
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -53,72 +65,11 @@ $conn->close();
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        .history-title {
-            font-family: "Poppins", sans-serif;
-            /* Font modern dan elegan */
-            font-size: 30px;
-            /* Ukuran font */
-            font-weight: bold;
-            /* Membuat tulisan tebal */
-            color: #6a5acd;
-            /* Warna ungu yang sama dengan elemen lainnya */
-            margin-top: 10px;
-            /* Jarak antara logo dan tulisan */
-            text-align: center;
-            /* Membuat tulisan rata tengah */
-        }
-
-        .table-container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 900px;
-            margin-top: 30px;
-        }
-
-        h2 {
-            color: #6a5acd;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .btn-success {
-            background-color: #6a5acd;
-            border-color: #6a5acd;
-        }
-
-        .btn-success:hover {
-            background-color: #ff7f50;
-            border-color: #ff7f50;
-        }
-
-        .table th,
-        .table td {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .table {
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        /* Responsif */
-        @media (max-width: 767px) {
-            .table-container {
-                width: 100%;
-                padding: 15px;
-            }
-        }
-    </style>
 </head>
 
 <body>
-    <div class="table-container">
-        <h2 class="history-title">History Penghapusan Data</h2>
+    <div class="tabled-container">
+        <h2 class="gradient-title">History Data</h2>
 
         <table class="table table-bordered table-hover">
             <thead>
@@ -146,11 +97,11 @@ $conn->close();
                             <td>
                                 <?php echo $row['status'] == 1 ? '<span class="status-active">Aktif</span>' : '<span class="status-inactive">Non-Aktif</span>'; ?>
                             </td>
-                            <td>
+                            <td class="button-group2">
                                 <form action="history.php" method="POST"
                                     onsubmit="return confirm('Apakah Anda yakin ingin memulihkan data ini?')">
                                     <input type="hidden" name="restore_nim" value="<?php echo $row['nim']; ?>">
-                                    <button type="submit" class="btn btn-success btn-sm">Pulihkan</button>
+                                    <button type="submit" class="btn btn-info btn-sm">Restore</button>
                                 </form>
                             </td>
                         </tr>
@@ -163,8 +114,8 @@ $conn->close();
             </tbody>
         </table>
 
-        <div class="text-center mt-3">
-            <a href="dashboard.php" class="btn btn-primary">Back</a>
+        <div class="button-group text-center mt-3">
+            <a href="dashboard.php" class="btn btn-purple">Back</a>
         </div>
     </div>
 </body>

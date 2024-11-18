@@ -71,73 +71,11 @@ $conn->close();
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        .dashboard-title {
-            font-family: "Poppins", sans-serif;
-            /* Font modern dan elegan */
-            font-size: 30px;
-            /* Ukuran font */
-            font-weight: bold;
-            /* Membuat tulisan tebal */
-            color: #6a5acd;
-            /* Warna ungu yang sama dengan elemen lainnya */
-            margin-top: 10px;
-            /* Jarak antara logo dan tulisan */
-            text-align: center;
-            /* Membuat tulisan rata tengah */
-        }
-
-        .table-container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 30px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        h2 {
-            color: #6a5acd;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .btn-success {
-            background-color: #6a5acd;
-            border-color: #6a5acd;
-        }
-
-        .btn-success:hover {
-            background-color: #ff7f50;
-            border-color: #ff7f50;
-        }
-
-        .table th,
-        .table td {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .table {
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        /* Responsif */
-        @media (max-width: 767px) {
-            .table-container {
-                width: 100%;
-                padding: 15px;
-            }
-        }
-    </style>
 </head>
 
 <body>
-    <div class="table-container mt-5">
-        <h2 class="text-center dashboard-title">List User RFID</h2>
+    <div class="tabled-container mt-5">
+        <h2 class="text-center gradient-title">List User RFID</h2>
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -164,13 +102,13 @@ $conn->close();
                             <td>
                                 <?php echo $row['status'] == 1 ? '<span class="status-active">Aktif</span>' : '<span class="status-inactive">Non-Aktif</span>'; ?>
                             </td>
-                            <td>
+                            <td class="button-group2">
                                 <form action="dashboard.php" method="POST" style="display:inline;"
                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                     <input type="hidden" name="delete_nim" value="<?php echo $row['nim']; ?>">
-                                    <button type="submit" class="btn col-5 btn-danger btn-sm">Delete</button>
+                                    <button type="submit" class="btn col-sm-6 btn-danger btn-sm">Delete</button>
                                 </form>
-                                <button type="button" class="btn col-5 btn-warning btn-sm" data-bs-toggle="modal"
+                                <button type="button" class="btn col-sm-6 btn-info btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#editModal<?php echo $row['nim']; ?>">Edit</button>
                             </td>
                         </tr>
@@ -220,7 +158,7 @@ $conn->close();
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                            <button type="submit" class="btn btn-info">Save</button>
                                         </div>
                                     </form>
                                 </div>
@@ -235,9 +173,9 @@ $conn->close();
             </tbody>
         </table>
 
-        <div class="text-center mt-3">
-            <a href="history.php" class="col-sm-2 btn btn-dashboard">History</a>
-            <a href="input.php" class="col-2 btn btn-dashboard">Add</a>
+        <div class="button-group text-center mt-3">
+            <a href="history.php" class="mx-3 col-sm-2 btn btn-orange">History</a>
+            <a href="input.php" class="mx-3 col-sm-2 btn btn-purple">Add</a>
         </div>
 
 

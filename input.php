@@ -55,50 +55,56 @@ $conn->close();
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 
 <body>
-    <div class="card-container" id="login-card">
-        <h2>RFID Registration</h2>
-        <form action="" method="POST">
-            <div class="mb-3">
-                <input type="text" class="form-control" id="nama_mahasiswa" name="nama_mahasiswa"
-                    placeholder="Nama Mahasiswa">
+    <div class="col-sm-2 card-container" id="login-card">
+        <h2 class="gradient-title">RFID Registration</h2>
+        <form class="form-container" action="" method="POST">
+            <div class="mb-3 form-group floating-label">
+                <input type="text" class="form-control" id="nama_mahasiswa" name="nama_mahasiswa" required>
+                <label for="nama">Nama Mahasiswa</label>
             </div>
-            <div class="mb-3">
-                <input type="text" class="form-control" id="nim" name="nim" placeholder="NIM">
+            <div class="mb-3 form-group floating-label">
+                <input type="text" class="form-control" id="nim" name="nim" required>
+                <label for="nim">NIM</label>
             </div>
-            <div class="mb-3">
-                <input type="text" class="form-control" id="nomor_rfid" name="nomor_rfid" placeholder="Nomor Kartu">
+            <div class="mb-3 form-group floating-label">
+                <input type="text" class="form-control" id="nomor_rfid" name="nomor_rfid" required>
+                <label for="nomor-kartu">No Kartu</label>
             </div>
-            <div class="mb-3">
-                <input type="number" class="form-control" id="nomor_loker" name="nomor_loker" placeholder="Nomor Loker">
+            <div class="mb-3 form-group floating-label">
+                <input type="number" class="form-control" id="nomor_loker" name="nomor_loker" required>
+                <label for="nomor-loker">No Loker</label>
             </div>
             <!-- Dropdown untuk Status -->
-            <div class="mb-3">
-                <select class="form-control" id="status" name="status">
-                    <option value="">Pilih Status</option>
+            <div class="mb-3 form-group floating-label">
+                <select class="form-select" id="status" name="status" required>
+                    <option value="" disabled selected></option>
                     <option value="1">Aktif</option>
                     <option value="0">Non-Aktif</option>
                 </select>
+                <label for="status">Status</label>
             </div>
 
             <!-- Kolom untuk Nomor HP -->
-            <div class="mb-3">
-                <input type="text" class="form-control" id="nomor_hp" name="nomor_hp" placeholder="Nomor HP">
+            <div class="mb-3 form-group floating-label">
+                <input type="text" class="form-control" id="nomor-hp" name="nomor_hp" required>
+                <label for="nomor-hp">No HP</label>
             </div>
 
             <!-- Tombol ke Dashboard -->
-            <div style="margin-top: 10px;">
-                <button type="submit" class="col-2 btn btn-primary">Add</button>
-                <a href="dashboard.php" class="col-2 btn-dashboard">List</a>
+            <div class="button-group" style="margin-top: 10px;">
+                <button type="submit" class="col-6 btn btn-purple">Add</button>
+                <a type="button" href="dashboard.php" class="col-6 btn btn-orange">List</a>
             </div>
         </form>
     </div>
 
     <!-- Logo Proyek -->
-    <div class="logo-container">
-        <img src="images/logo.png" alt="Logo Proyek" class="circle-avatar">
+    <div class="col-sm-2 logo-container">
+        <img src="images/logo.png" alt="Logo Proyek" class="rotate-scale-up circle-avatar">
         <h2 class="project-title">Smart Locker</h2>
     </div>
 
