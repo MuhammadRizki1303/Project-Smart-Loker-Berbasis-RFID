@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2024 at 04:08 PM
+-- Generation Time: Nov 18, 2024 at 04:41 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.0.19
 
@@ -79,7 +79,7 @@ CREATE TABLE `rfid_cards` (
 --
 
 INSERT INTO `rfid_cards` (`id`, `nama`, `nim`, `nomor_rfid`, `nomor_loker`, `status`, `nomor_hp`) VALUES
-(36, 'Muhammad Rizki', '2022573010023', '', 0, 1, '82279226814');
+(38, 'Muhammad Rizki', '2022573010023', '', 0, 1, '82279226814');
 
 --
 -- Indexes for dumped tables
@@ -118,13 +118,13 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `rfid_cards`
 --
 ALTER TABLE `rfid_cards`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
