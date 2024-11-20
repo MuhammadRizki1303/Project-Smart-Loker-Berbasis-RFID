@@ -63,28 +63,26 @@ $conn->close();
         <h2 class="gradient-title">RFID Registration</h2>
         <form class="form-container" action="" method="POST">
             <div class="mb-3 form-group floating-label">
-                <input type="text" class="form-control" id="nama_mahasiswa" name="nama_mahasiswa" placeholder="Nama"
+                <input type="text" class="form-control" id="nama_mahasiswa" name="nama_mahasiswa" placeholder=""
                     required>
                 <label for="nama">Nama</label>
             </div>
             <div class="mb-3 form-group floating-label">
-                <input type="text" class="form-control" id="nim" name="nim" placeholder="NIM" required>
+                <input type="text" class="form-control" id="nim" name="nim" placeholder="" required>
                 <label for="nim">NIM</label>
             </div>
             <div class="mb-3 form-group floating-label">
-                <input type="text" class="form-control" id="nomor_rfid" name="nomor_rfid" placeholder="No Kartu"
-                    required>
+                <input type="text" class="form-control" id="nomor_rfid" name="nomor_rfid" placeholder="" required>
                 <label for="nomor-kartu">No Kartu</label>
             </div>
             <div class="mb-3 form-group floating-label">
-                <input type="number" class="form-control" id="nomor_loker" name="nomor_loker" placeholder="No Loker"
-                    required>
+                <input type="number" class="form-control" id="nomor_loker" name="nomor_loker" placeholder="" required>
                 <label for="nomor-loker">No Loker</label>
             </div>
             <!-- Dropdown untuk Status -->
             <div class="mb-3 form-group floating-label">
                 <select class="form-select" id="status" name="status" required>
-                    <option value="" disabled selected><input type="text" placeholder="Pilih"></option>
+                    <option value="" disabled selected></option>
                     <option value="1">Aktif</option>
                     <option value="0">Non-Aktif</option>
                 </select>
@@ -93,7 +91,7 @@ $conn->close();
 
             <!-- Kolom untuk Nomor HP -->
             <div class="mb-3 form-group floating-label">
-                <input type="text" class="form-control" id="nomor-hp" name="nomor_hp" placeholder="No HP" required>
+                <input type="text" class="form-control" id="nomor-hp" name="nomor_hp" placeholder="" required>
                 <label for="nomor-hp">No HP</label>
             </div>
 
