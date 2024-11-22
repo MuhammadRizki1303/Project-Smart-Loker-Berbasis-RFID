@@ -13,15 +13,28 @@ def capture_image():
         print("Error: Kamera tidak bisa dibuka.")
         return None
 
-    ret, frame = cap.read()
-    cap.release()
-    
-    if not ret:
-        print("Error: tidak bisa mengambil gambar.")
-        return None
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: tidak bisa mengambil gambar.")
+            break
+        
+        # Tampilkan kamera
+        cv2.imshow("Tekan Spasi untuk Mengambil Gambar", frame)
+        
+        # Tekan spasi untuk mengambil gambar
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord(' '):  # Spasi ditekan
+            cv2.imwrite("captured_image.jpg", frame)
+            print("Gambar diambil dan disimpan dengan nama 'captured_image.jpg'")
+            break
+        elif key == ord('q'):  # Tekan 'q' untuk keluar tanpa mengambil gambar
+            print("Proses dibatalkan.")
+            frame = None
+            break
 
-    cv2.imwrite("captured_image.jpg", frame)
-    print("Gambar diambil dan disimpan dengan nama 'captured_image.jpg'")
+    cap.release()
+    cv2.destroyAllWindows()
     
     return frame
 
