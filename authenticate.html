@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Autentikasi Wajah</title>
+    <style>
+      video,
+      canvas {
+        display: block;
+        margin: 20px auto;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+      }
+      button {
+        display: block;
+        margin: 10px auto;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="text-align: center">Autentikasi Wajah</h1>
+    <video id="camera" autoplay playsinline></video>
+    <canvas id="snapshot" width="640" height="480"></canvas>
+    <button id="capture">Ambil Gambar</button>
+    <button id="authenticate" style="display: none">Autentikasi</button>
+
+    <script>
+      const video = document.getElementById("camera");
+      const canvas = document.getElementById("snapshot");
+      const captureButton = document.getElementById("capture");
+      const authenticateButton = document.getElementById("authenticate");
+
+      // Akses kamera
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => (video.srcObject = stream))
+        .catch((err) => alert("Gagal mengakses kamera: " + err.message));
+
+      // Tangkap gambar
+      captureButton.addEventListener("click", () => {
+        const context = canvas.getContext("2d");
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        authenticateButton.style.display = "block";
+        alert("Gambar berhasil diambil. Klik 'Autentikasi' untuk melanjutkan.");
+      });
+
+      // Kirim gambar untuk autentikasi
+      authenticateButton.addEventListener("click", () => {
+        const imageData = canvas.toDataURL("image/jpeg"); // Data Base64
+        fetch("http://127.0.0.1:5000/authenticate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image1: imageData }), // Kirim gambar ke server
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.status === "sukses") {
+              alert("Autentikasi berhasil!");
+              window.location.href =
+                "/Project-Smart-Loker-Berbasis-RFID/input.php";
+            } else {
+              alert("Autentikasi gagal: " + result.message);
+            }
+          })
+          .catch((err) => alert("Kesalahan: " + err.message));
+      });
+    </script>
+  </body>
+</html>
