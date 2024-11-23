@@ -5,28 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Autentikasi Wajah</title>
     <style>
+      /* Tema warna dan background */
+      body {
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(45deg, #ff7f50, #6a5acd, #ffffff);
+        background-size: 300% 300%;
+        animation: gradientBG 15s ease infinite;
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
+
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Card login */
+      .card-container {
+        width: 400px;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        text-align: center;
+      }
+
+      /* Animasi hover */
+      .card-container:hover {
+        transform: scale(1.05);
+        transition: 0.3s;
+      }
+
+      .btn-primary {
+        background-color: #6a5acd;
+        border-color: #ff7f50;
+        color: black;
+        padding: 8px 15px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 15px;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: #ff7f50;
+        border-color: #6a5acd;
+        color: #ffffff;
+      }
+
+      h2 {
+        color: #6a5acd;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
       video,
       canvas {
         display: block;
         margin: 20px auto;
         border: 2px solid #ddd;
         border-radius: 5px;
+        max-width: 100%;
       }
+
       button {
-        display: block;
+        display: inline-block;
         margin: 10px auto;
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
+        background: #6a5acd;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.2s ease, background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #ff7f50;
+        transform: scale(1.05);
       }
     </style>
   </head>
+
   <body>
-    <h1 style="text-align: center">Autentikasi Wajah</h1>
-    <video id="camera" autoplay playsinline></video>
-    <canvas id="snapshot" width="640" height="480"></canvas>
-    <button id="capture">Ambil Gambar</button>
-    <button id="authenticate" style="display: none">Autentikasi</button>
+    <div class="card-container">
+      <h2>Autentikasi Wajah</h2>
+      <video id="camera" autoplay playsinline></video>
+      <canvas
+        id="snapshot"
+        width="640"
+        height="480"
+        style="display: none"
+      ></canvas>
+      <button id="capture">Ambil Gambar</button>
+      <button id="authenticate" style="display: none">Autentikasi</button>
+    </div>
 
     <script>
       const video = document.getElementById("camera");
@@ -60,8 +150,7 @@
           .then((result) => {
             if (result.status === "sukses") {
               alert("Autentikasi berhasil!");
-              window.location.href =
-                "/Project-Smart-Loker-Berbasis-RFID/input.php";
+              window.location.href = "input.php";
             } else {
               alert("Autentikasi gagal: " + result.message);
             }
