@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Autentikasi Wajah</title>
     <style>
-      /* Tema warna dan background */
       body {
         background-color: #f0f0f0;
         display: flex;
@@ -24,17 +23,14 @@
         0% {
           background-position: 0% 50%;
         }
-
         50% {
           background-position: 100% 50%;
         }
-
         100% {
           background-position: 0% 50%;
         }
       }
 
-      /* Card login */
       .card-container {
         width: 400px;
         padding: 30px;
@@ -45,43 +41,9 @@
         text-align: center;
       }
 
-      /* Animasi hover */
       .card-container:hover {
         transform: scale(1.05);
         transition: 0.3s;
-      }
-
-      .btn-primary {
-        background-color: #6a5acd;
-        border-color: #ff7f50;
-        color: black;
-        padding: 8px 15px;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 15px;
-        margin-top: 10px;
-        transition: background-color 0.3s ease;
-      }
-
-      .btn-primary:hover {
-        background-color: #ff7f50;
-        border-color: #6a5acd;
-        color: #ffffff;
-      }
-
-      h2 {
-        color: #6a5acd;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      video,
-      canvas {
-        display: block;
-        margin: 20px auto;
-        border: 2px solid #ddd;
-        border-radius: 5px;
-        max-width: 100%;
       }
 
       button {
@@ -101,6 +63,20 @@
         background-color: #ff7f50;
         transform: scale(1.05);
       }
+
+      video,
+      canvas {
+        display: block;
+        margin: 20px auto;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        max-width: 100%;
+      }
+
+      #capturedImage {
+        max-width: 100%;
+        margin-top: 20px;
+      }
     </style>
   </head>
 
@@ -116,6 +92,7 @@
       ></canvas>
       <button id="capture">Ambil Gambar</button>
       <button id="authenticate" style="display: none">Autentikasi</button>
+      <img id="capturedImage" style="display: none" />
     </div>
 
     <script>
@@ -123,6 +100,7 @@
       const canvas = document.getElementById("snapshot");
       const captureButton = document.getElementById("capture");
       const authenticateButton = document.getElementById("authenticate");
+      const capturedImage = document.getElementById("capturedImage");
 
       // Akses kamera
       navigator.mediaDevices
@@ -135,6 +113,11 @@
         const context = canvas.getContext("2d");
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         authenticateButton.style.display = "block";
+
+        // Tampilkan gambar yang diambil di elemen <img>
+        capturedImage.style.display = "block";
+        capturedImage.src = canvas.toDataURL("image/jpeg");
+
         alert("Gambar berhasil diambil. Klik 'Autentikasi' untuk melanjutkan.");
       });
 
@@ -150,7 +133,7 @@
           .then((result) => {
             if (result.status === "sukses") {
               alert("Autentikasi berhasil!");
-              window.location.href = "input.php";
+              window.location.href = "input.php"; // Redirect jika sukses
             } else {
               alert("Autentikasi gagal: " + result.message);
             }
