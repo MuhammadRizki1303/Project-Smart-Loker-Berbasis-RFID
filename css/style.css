@@ -268,6 +268,18 @@ h2 {
   margin-top: 30px;
 }
 
+.tabled-container.show {
+  opacity: 10;
+  transform: translateY(5);
+  transition: 1s;
+}
+
+/* Animasi hover */
+.tabled-container:hover {
+  transform: scale(1.05);
+  transition: 0.3s;
+}
+
 h2 {
   color: #6a5acd;
   text-align: center;

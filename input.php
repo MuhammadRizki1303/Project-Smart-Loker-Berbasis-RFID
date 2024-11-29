@@ -59,7 +59,7 @@ $conn->close();
 </head>
 
 <body>
-    <div class="col-sm-2 card-container" id="login-card">
+    <div class="col-sm-6 col-lg-2 card-container" id="login-card">
         <h2 class="gradient-title">RFID Registration</h2>
         <form class="form-container" action="" method="POST">
             <div class="mb-3 form-group floating-label">
@@ -104,7 +104,7 @@ $conn->close();
     </div>
 
     <!-- Logo Proyek -->
-    <div class="col-sm-2 logo-container">
+    <div class="col-sm-6 col-lg-2 logo-container">
         <img src="images/logo.png" alt="Logo Proyek" class="rotate-scale-up circle-avatar">
         <h2 class="project-title">Smart Locker</h2>
     </div>
