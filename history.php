@@ -20,29 +20,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['restore_nim'])) {
         exit();
     }
 
-    // Memulihkan data dari tabel history ke tabel rfid_cards
-    $restore_sql = "INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker, nomor_hp) 
-                    SELECT nama, nim, COALESCE(nomor_rfid, '') AS nomor_rfid, COALESCE(nomor_loker, '') AS nomor_loker, status, nomor_hp 
+    // Pulihkan data dari tabel history ke tabel rfid_cards dengan status Aktif
+    $restore_sql = "INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker, status, nomor_hp) 
+                    SELECT nama, nim, COALESCE(nomor_rfid, ''), COALESCE(nomor_loker, ''), 1 AS status, nomor_hp 
                     FROM history WHERE nim = ?";
     $stmt = $conn->prepare($restore_sql);
-    if (!$stmt) {
-        die("Error saat prepare statement: " . $conn->error);
-    }
-
-    $stmt->bind_param("s", $nim);
-    if ($stmt->execute()) {
-        // Hapus data dari tabel history setelah dipulihkan
-        $delete_sql = "DELETE FROM history WHERE nim = ?";
-        $stmt_delete = $conn->prepare($delete_sql);
-        $stmt_delete->bind_param("s", $nim);
-
-        if ($stmt_delete->execute()) {
-            echo "<script>alert('Data berhasil dipulihkan'); window.location.href='history.php';</script>";
+    if ($stmt) {
+        $stmt->bind_param("s", $nim);
+        if ($stmt->execute()) {
+            // Hapus data dari tabel history setelah dipulihkan
+            $delete_history = "DELETE FROM history WHERE nim = ?";
+            $stmt_delete = $conn->prepare($delete_history);
+            $stmt_delete->bind_param("s", $nim);
+            if ($stmt_delete->execute()) {
+                echo "<script>alert('Data berhasil dipulihkan'); window.location.href='history.php';</script>";
+            } else {
+                echo "<script>alert('Gagal menghapus data dari history.');</script>";
+            }
         } else {
-            echo "<script>alert('Gagal menghapus data dari history.');</script>";
+            echo "<script>alert('Gagal memulihkan data ke rfid_cards.');</script>";
         }
     } else {
-        echo "<script>alert('Gagal memulihkan data ke rfid_cards.');</script>";
+        die("Error saat prepare statement: " . $conn->error);
     }
 }
 
