@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['restore_nim'])) {
     }
 
     // Memulihkan data dari tabel history ke tabel rfid_cards
-    $restore_sql = "INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker, status, nomor_hp) 
+    $restore_sql = "INSERT INTO rfid_cards (nama, nim, nomor_rfid, nomor_loker, nomor_hp) 
                     SELECT nama, nim, COALESCE(nomor_rfid, '') AS nomor_rfid, COALESCE(nomor_loker, '') AS nomor_loker, status, nomor_hp 
                     FROM history WHERE nim = ?";
     $stmt = $conn->prepare($restore_sql);
@@ -86,30 +86,30 @@ $conn->close();
             </thead>
             <tbody>
                 <?php if ($result->num_rows > 0): ?>
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                        <tr>
-                            <td><?php echo $row['id']; ?></td>
-                            <td><?php echo $row['nama']; ?></td>
-                            <td><?php echo $row['nim']; ?></td>
-                            <td><?php echo $row['nomor_rfid']; ?></td>
-                            <td><?php echo $row['nomor_loker']; ?></td>
-                            <td><?php echo $row['nomor_hp']; ?></td>
-                            <td>
-                                <?php echo $row['status'] == 1 ? '<span class="status-active">Aktif</span>' : '<span class="status-inactive">Non-Aktif</span>'; ?>
-                            </td>
-                            <td class="button-group2">
-                                <form action="history.php" method="POST"
-                                    onsubmit="return confirm('Apakah Anda yakin ingin memulihkan data ini?')">
-                                    <input type="hidden" name="restore_nim" value="<?php echo $row['nim']; ?>">
-                                    <button type="submit" class="btn btn-info btn-sm">Restore</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                <tr>
+                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['nama']; ?></td>
+                    <td><?php echo $row['nim']; ?></td>
+                    <td><?php echo $row['nomor_rfid']; ?></td>
+                    <td><?php echo $row['nomor_loker']; ?></td>
+                    <td><?php echo $row['nomor_hp']; ?></td>
+                    <td>
+                        <?php echo $row['status'] == 1 ? '<span class="status-active">Aktif</span>' : '<span class="status-inactive">Non-Aktif</span>'; ?>
+                    </td>
+                    <td class="button-group2">
+                        <form action="history.php" method="POST"
+                            onsubmit="return confirm('Apakah Anda yakin ingin memulihkan data ini?')">
+                            <input type="hidden" name="restore_nim" value="<?php echo $row['nim']; ?>">
+                            <button type="submit" class="btn btn-info btn-sm">Restore</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
                 <?php else: ?>
-                    <tr>
-                        <td colspan="8">Tidak ada data yang tersedia.</td>
-                    </tr>
+                <tr>
+                    <td colspan="8">Tidak ada data yang tersedia.</td>
+                </tr>
                 <?php endif; ?>
             </tbody>
         </table>
