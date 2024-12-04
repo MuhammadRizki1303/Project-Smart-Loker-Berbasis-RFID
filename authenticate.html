@@ -77,6 +77,12 @@
         max-width: 100%;
         margin-top: 20px;
       }
+
+      #loading {
+        display: none;
+        color: #6a5acd;
+        font-weight: bold;
+      }
     </style>
   </head>
 
@@ -93,6 +99,7 @@
       <button id="capture">Ambil Gambar</button>
       <button id="authenticate" style="display: none">Autentikasi</button>
       <img id="capturedImage" style="display: none" />
+      <div id="loading">Memverifikasi...</div>
     </div>
 
     <script>
@@ -101,12 +108,17 @@
       const captureButton = document.getElementById("capture");
       const authenticateButton = document.getElementById("authenticate");
       const capturedImage = document.getElementById("capturedImage");
+      const loadingIndicator = document.getElementById("loading");
 
       // Akses kamera
       navigator.mediaDevices
         .getUserMedia({ video: true })
-        .then((stream) => (video.srcObject = stream))
-        .catch((err) => alert("Gagal mengakses kamera: " + err.message));
+        .then((stream) => {
+          video.srcObject = stream;
+        })
+        .catch((err) => {
+          alert("Gagal mengakses kamera: " + err.message);
+        });
 
       // Tangkap gambar
       captureButton.addEventListener("click", () => {
@@ -124,12 +136,20 @@
       // Kirim gambar untuk autentikasi
       authenticateButton.addEventListener("click", () => {
         const imageData = canvas.toDataURL("image/jpeg"); // Data Base64
+        authenticateButton.disabled = true; // Disable tombol sementara
+        loadingIndicator.style.display = "block"; // Tampilkan indikator loading
+
         fetch("http://127.0.0.1:5000/authenticate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ image1: imageData }), // Kirim gambar ke server
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Terjadi kesalahan pada server.");
+            }
+            return response.json();
+          })
           .then((result) => {
             if (result.status === "sukses") {
               alert("Autentikasi berhasil!");
@@ -138,7 +158,13 @@
               alert("Autentikasi gagal: " + result.message);
             }
           })
-          .catch((err) => alert("Kesalahan: " + err.message));
+          .catch((err) => {
+            alert("Kesalahan: " + err.message);
+          })
+          .finally(() => {
+            loadingIndicator.style.display = "none"; // Sembunyikan indikator loading
+            authenticateButton.disabled = false; // Aktifkan tombol kembali
+          });
       });
     </script>
   </body>

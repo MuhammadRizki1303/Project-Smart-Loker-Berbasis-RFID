@@ -4,6 +4,10 @@ import cv2
 import numpy as np
 import base64
 from deepface import DeepFace
+import logging
+
+# Konfigurasi logging
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 CORS(app)  # Mengizinkan semua permintaan lintas domain
@@ -18,23 +22,28 @@ def authenticate():
     try:
         # Ambil data JSON dari permintaan
         data = request.json
-        if not data or 'image1' not in data:  # Validasi input
+        if not data or 'image1' not in data:
             return jsonify({"status": "gagal", "message": "Data gambar tidak lengkap."}), 400
 
         # Decode gambar dari Base64
-        image1_base64 = data['image1'].split(",")[1]
-        image1_data = base64.b64decode(image1_base64)
+        try:
+            image1_base64 = data['image1'].split(",")[1]
+            image1_data = base64.b64decode(image1_base64)
+        except Exception as e:
+            logging.error(f"Kesalahan decoding Base64: {str(e)}")
+            return jsonify({"status": "gagal", "message": "Format Base64 tidak valid."}), 400
 
-        # Simpan gambar yang diterima sebagai file di server
-        with open("uploaded_image.jpg", "wb") as img_file:
-            img_file.write(image1_data)
-
-        # Proses gambar yang telah disimpan
+        # Proses gambar dari buffer
         image1 = cv2.imdecode(np.frombuffer(image1_data, np.uint8), cv2.IMREAD_COLOR)
+        if image1 is None:
+            return jsonify({"status": "gagal", "message": "Gambar tidak valid."}), 400
 
         # Membaca gambar referensi dari server
         reference_image_path = 'reference_image.jpg'
         reference_image = cv2.imread(reference_image_path)
+        if reference_image is None:
+            logging.error("Gambar referensi tidak ditemukan.")
+            return jsonify({"status": "gagal", "message": "Gambar referensi tidak ditemukan di server."}), 500
 
         # Ekstraksi embedding dari kedua gambar menggunakan DeepFace
         embedding1 = DeepFace.represent(image1, model_name="VGG-Face", enforce_detection=False)
@@ -42,17 +51,17 @@ def authenticate():
 
         # Hitung jarak embedding
         distance = calculate_distance(embedding1[0]['embedding'], embedding2[0]['embedding'])
-        print(f"Jarak embedding: {distance}")
+        logging.info(f"Jarak embedding: {distance}")
 
-        threshold = 1.38
+        threshold = 1.4
         # Membandingkan jarak dengan threshold untuk autentikasi
-        if distance < threshold:  # Threshold jarak untuk autentikasi berhasil
+        if distance < threshold:
             return jsonify({"status": "sukses", "message": "Autentikasi berhasil."})
         else:
             return jsonify({"status": "gagal", "message": "Wajah tidak cocok."})
     except Exception as e:
         # Menangani kesalahan dan mengembalikan pesan error
-        print(f"Error: {str(e)}")
+        logging.error(f"Kesalahan: {str(e)}")
         return jsonify({"status": "gagal", "message": f"Kesalahan: {str(e)}"}), 500
 
 # Menjalankan server Flask
