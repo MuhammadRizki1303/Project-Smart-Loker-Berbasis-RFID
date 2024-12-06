@@ -53,7 +53,7 @@ def authenticate():
         distance = calculate_distance(embedding1[0]['embedding'], embedding2[0]['embedding'])
         logging.info(f"Jarak embedding: {distance}")
 
-        threshold = 1.4
+        threshold = 1
         # Membandingkan jarak dengan threshold untuk autentikasi
         if distance < threshold:
             return jsonify({"status": "sukses", "message": "Autentikasi berhasil."})
